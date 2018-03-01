@@ -139,8 +139,7 @@ func parseFlags() *config {
 	flag.StringVar(&cfg.listenAddr, "web.listen-address", ":9201", "Address to listen on for web endpoints.")
 	flag.StringVar(&cfg.telemetryPath, "web.telemetry-path", "/metrics", "Address to listen on for web endpoints.")
 
-	// elastixsearch config, add 20170903
-	flag.StringVar(&cfg.elasticsearchURL, "elasticsearch-url", "http://localhost:9200",
+	flag.StringVar(&cfg.elasticsearchURL, "elasticsearch-url", "",
 		"The URL of the remote Elasticsearch server to send samples to. None, if empty.",
 	)
 	flag.StringVar(&cfg.elasticsearchIndex, "elasticsearch-index", "prometheus",
@@ -194,7 +193,7 @@ func buildClients(cfg *config) ([]writer, []reader) {
 		writers = append(writers, c)
 		readers = append(readers, c)
 	}
-	// add 20170903
+	
 	if cfg.elasticsearchURL != "" {
 		c := elasticsearch.NewClient(cfg.elasticsearchURL, cfg.elasticsearchIndex, cfg.elasticsearchType)
 		writers = append(writers, c)
